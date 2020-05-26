@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="C:/Users/conta/jgrapht-1.2.0/lib/jgrapht-core-1.2.0.jar" sourcepath="C:/Users/conta/jgrapht-1.2.0/source/jgrapht-core/src/main">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/C:/Users/conta/jgrapht-1.2.0/javadoc/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/conta/jgraphx/jgraphx.jar"/>
+	<classpathentry kind="lib" path="C:/Users/conta/jgrapht-1.2.0/lib/jgrapht-ext-1.2.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/conta/jgraphx/mxgraph-all.jar"/>
+	<classpathentry kind="lib" path="C:/Users/conta/jgraphx/mxgraph-swing.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
