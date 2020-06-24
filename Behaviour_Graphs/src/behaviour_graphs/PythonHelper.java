@@ -1,11 +1,15 @@
 package behaviour_graphs;
 
 import java.util.List;
+
+import javax.swing.JFrame;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.lang.Math;
+import org.jgrapht.Graph;
 
 public class PythonHelper {
 	private ArrayList<ArrayList<ArrayList<Float>>> following;
@@ -202,9 +206,9 @@ public class PythonHelper {
 		float[][][] containings = new float[clusters.length][15][15];
 		float[][][] precedings = new float[clusters.length][15][15];
 		
-		for(int cluster = 0; cluster <= clusters.length; cluster++) {
-			for(int row = 0; row <= clusters[cluster].length; row++) {
-				for(int col = 0; col <= clusters[cluster][row].length; col++) {
+		for(int cluster = 0; cluster < clusters.length; cluster++) {
+			for(int row = 0; row < clusters[cluster].length; row++) {
+				for(int col = 0; col < clusters[cluster][row].length; col++) {
 					if(col == 0) {
 						totals[cluster][row] = Math.round(clusters[cluster][row][col] *100);
 						clusters[cluster][row][col] = 0.00f;
@@ -216,9 +220,9 @@ public class PythonHelper {
 		}
 		
 		// Print out the lists of totals.
-		for(int cluster = 0; cluster <= totals.length; cluster++) {
+		for(int cluster = 0; cluster < totals.length; cluster++) {
 			System.out.print("Cluster " + cluster + "\n[");
-			for(int i = 0; i <= totals[cluster].length; i++) {
+			for(int i = 0; i < totals[cluster].length; i++) {
 				System.out.print(totals[cluster][i] + ", ");
 			}
 			System.out.println("]");
@@ -226,5 +230,25 @@ public class PythonHelper {
 		
 		// Set followings to be the cluster array with the first column of each cluster replaced with 0s.
 		//float[][][] followings = (float[][][]) clusters.toArray();
+		
+		for(int cluster = 0; cluster < clusters.length; cluster++) {
+			// The graph creator will create the JGraph from the analysed data.
+			GraphCreator gc = new GraphCreator(totals[cluster], precedings[cluster], containings[cluster], clusters[cluster], totals[cluster], 0);
+			Graph<BehaviourVertex, BehaviourEdge> g = gc.getGraph();
+			
+			// The graph visualiser will format the graph to be displayed to the user.
+			GraphVisualiser applet = new GraphVisualiser(g);
+	        applet.init();
+	        //applet.setVisible(false);
+	        
+	        // Put the formatted graph in a frame and show it.
+	        GraphWindow frame = new GraphWindow(applet);
+	        frame.getContentPane().add(applet);
+	        frame.setTitle("Graph for coach's behaviour");
+	        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	        frame.pack();
+	        frame.setVisible(true);
+	        frame.setLocationRelativeTo(null);
+		}
 	}
 }
