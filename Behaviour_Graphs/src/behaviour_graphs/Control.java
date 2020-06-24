@@ -23,6 +23,27 @@ public class Control{
 		ArrayList<ArrayList<ArrayList<Float>>> f = PH.getFollowing();
 		ArrayList<ArrayList<Integer>> i = PH.getSequences();
 		System.out.println(f);
+		System.out.println(i);
+		
+		ArrayList<ArrayList<Float>> sm = PH.getSquashMatrix();
+		System.out.println("Squash Matrix:");
+		for(ArrayList<Float> arr: sm) {
+			System.out.print("[");
+			for(Float value: arr) {
+				System.out.print(value + ", ");
+			}
+			System.out.println("]");
+		}
+		
+		ArrayList<ArrayList<Float>> pm = PH.getPhysioMatrix();
+		System.out.println("Physio Matrix:");
+		for(ArrayList<Float> arr: pm) {
+			System.out.print("[");
+			for(Float value: arr) {
+				System.out.print(value + ", ");
+			}
+			System.out.println("]");
+		}
 		/*
 		
 		
