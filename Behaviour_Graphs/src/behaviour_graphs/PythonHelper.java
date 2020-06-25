@@ -241,7 +241,7 @@ public class PythonHelper {
 			Graph<BehaviourVertex, BehaviourEdge> g = gc.getGraph();
 			
 			// The graph visualiser will format the graph to be displayed to the user.
-			GraphVisualiser applet = new GraphVisualiser(g);
+			GraphVisualiser applet = new GraphVisualiser(g, cluster);
 	        applet.init();
 	        //applet.setVisible(false);
 	        

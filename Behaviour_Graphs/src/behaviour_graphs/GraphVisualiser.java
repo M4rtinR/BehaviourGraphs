@@ -33,6 +33,7 @@ import org.jgrapht.Graph;
 public class GraphVisualiser extends JApplet{
 	
 	Graph<BehaviourVertex, BehaviourEdge> g; // Graph to be formatted
+	int graphNumber;
 	
 	// Maps from behaviour code to behaviour names and associated colours.
 	Map<Integer, String> names = new HashMap<Integer, String>();
@@ -48,7 +49,9 @@ public class GraphVisualiser extends JApplet{
 	 * Constructor
 	 * @param graph - the JGraph to be visualised.
 	 */
-	public GraphVisualiser(Graph<BehaviourVertex, BehaviourEdge> graph) {
+	public GraphVisualiser(Graph<BehaviourVertex, BehaviourEdge> graph, int graphNumber) {
+		this.graphNumber = graphNumber;
+		
 		//Initialise names
 		names.put(0, "Start");
 		names.put(1, "Pre-Instruction");
@@ -305,9 +308,9 @@ public class GraphVisualiser extends JApplet{
             		biggest = size*multiplier;
             	}
             }
-            style.getDefaultVertexStyle().put(mxConstants.STYLE_FONTSIZE, biggest*12/100); // This changes the text size in the boxes.
+            style.getDefaultVertexStyle().put(mxConstants.STYLE_FONTSIZE, biggest*30/100); // This changes the text size in the boxes.
             style.getDefaultVertexStyle().put(mxConstants.STYLE_FONTCOLOR, Color.BLACK);
-            style.getDefaultEdgeStyle().put(mxConstants.STYLE_FONTSIZE, biggest*9/100); // This changes the text size on the arrows.
+            style.getDefaultEdgeStyle().put(mxConstants.STYLE_FONTSIZE, biggest*20/100); // This changes the text size on the arrows.
             //style.getDefaultEdgeStyle().put(mxConstants.STYLE_STROKEWIDTH, biggest*1/100);
         	
             
@@ -350,7 +353,7 @@ public class GraphVisualiser extends JApplet{
                 	// Set width of edge
                 	String width = ""+c.getValue();
                 	Hashtable<String, Object> thisStyle = new Hashtable<String, Object>();
-                	thisStyle.put(mxConstants.STYLE_STROKEWIDTH, Double.valueOf(width) *5); // This changes the width of the arrows.
+                	thisStyle.put(mxConstants.STYLE_STROKEWIDTH, Double.valueOf(width) *10); // This changes the width of the arrows.
                 	style.putCellStyle(""+count2, thisStyle);
                 	
                 	c.setStyle(""+count2);
@@ -409,7 +412,7 @@ public class GraphVisualiser extends JApplet{
         // Save the graph as an image to be used elsewhere.
         BufferedImage image = mxCellRenderer.createBufferedImage(jgxAdapter, null, 1, Color.WHITE, true, null);
         try {
-			ImageIO.write(image, "PNG", new File("C:\\Users\\conta\\OneDrive\\Documents\\Uni\\PhD\\Observation Study\\Squash Coaches\\SPSS\\Observation Study\\graph.png"));
+			ImageIO.write(image, "PNG", new File("C:\\Users\\conta\\OneDrive\\Documents\\Uni\\PhD\\Observation Study\\ClusteredStyles\\graph" + graphNumber + ".png"));
 		} catch (IOException e) {
 			System.err.println("Could not save graph as image.");
 			e.printStackTrace();
