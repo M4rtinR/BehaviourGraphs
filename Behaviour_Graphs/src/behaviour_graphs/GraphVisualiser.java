@@ -156,7 +156,7 @@ public class GraphVisualiser extends JApplet{
         	for(BehaviourVertex v:g.vertexSet()) {
         		//System.out.println("count = " + count);
         		System.out.println("\nbehaviour = " + v.getbehaviour());
-        		if(count == 0 || count == 11) { // Change this to "(count == 0 || count == <no_of__behaviours>)"
+        		if(count == 0 || count == g.vertexSet().size() - 1) { // Change this to "(count == 0 || count == <no_of__behaviours>)"
         			// The size of start and end will always be 30
         			sizes[count] = 10;
         			count++;
@@ -313,27 +313,40 @@ public class GraphVisualiser extends JApplet{
             
             // Set the sizes of the vertices using the geometry of the associated cell.
             int count2 = 0;
+            //boolean addedParent = false;
             
             for (Object cell : cells) {
             	mxCell c = (mxCell) cell;
-            	
-                if (c.isVertex()) { //isVertex
-                	mxGeometry geometry = c.getGeometry();;
+            	System.out.println("VertexSet size: " + g.vertexSet().size());
+                if (c.isVertex() && count2 != 0 && count2 != g.vertexSet().size() - 1) { //isVertex not start or end.
+                	//addedParent = false;
+                	mxGeometry geometry = c.getGeometry();
+                	System.out.println(c.getValue() + "count: " + count2);
                 	/*if(count2 == 0 || count2 == 5) {
             			geometry.setWidth(30);
 		                geometry.setHeight(30);
                 	} else {*/
-                		geometry.setWidth(sizes[count2]*multiplier);
-		                geometry.setHeight(sizes[count2]*multiplier);
-                		//geometry.setHeight(30);
-		                
-		                // For each concurrent behaviour associated with this behaviour, add this cell as a parent.
-		                for(int i = 0; i < contains[count2]; i++) {
-		                	parents.add(c);
-		                }
+            		geometry.setWidth(sizes[count2]*multiplier);
+	                geometry.setHeight(sizes[count2]*multiplier);
+            		//geometry.setHeight(30);
+	                
+	                // For each concurrent behaviour associated with this behaviour, add this cell as a parent.
+	                for(int i = 0; i < contains[count2]; i++) {
+	                	parents.add(c);
+	                	
+	                }
+	                
+	                count2++;
 		                
                 	//}
+                } else if(c.isVertex()) {
+                	mxGeometry geometry = c.getGeometry();;
+                	
+                	geometry.setWidth(sizes[count2]*multiplier);
+		            geometry.setHeight(sizes[count2]*multiplier);
+		            count2++;
                 } else if (c.isEdge()) {
+                
                 	// Set width of edge
                 	String width = ""+c.getValue();
                 	Hashtable<String, Object> thisStyle = new Hashtable<String, Object>();
@@ -342,7 +355,7 @@ public class GraphVisualiser extends JApplet{
                 	
                 	c.setStyle(""+count2);
                 }
-                count2++;
+                
             }
         } finally {
         	jgxAdapter.getModel().endUpdate();
@@ -362,9 +375,12 @@ public class GraphVisualiser extends JApplet{
 	        
 	        int count = 0; // Used to find all the behaviours contained in/concurrent to this one.
 	        int contCount = 0; // Used to get the right parent.
+	        System.out.println("Parents: " + parents);
+	        System.out.println("notAddParents: " + notAddParents);
 	        for(Object cell : cells) {
 	        	mxCell c = (mxCell) cell;
 	        	if(parents.contains(c)) {
+	        		
 	        		mxGeometry geometry = c.getGeometry();
 		        	for(int i = 0; i < contains[count]; i++) {
 		        		// Each concurrent behaviour will be a vertex overlapping (i.e. with the same x and y coordinates) the parent behaviour.
@@ -381,9 +397,10 @@ public class GraphVisualiser extends JApplet{
 		        		contCount++;
 		        		
 		        	}
+		        	
 	        	}
-	        	
 	        	count++;
+	        	
 	        }
 		} finally {
 			jgxAdapter.getModel().endUpdate();

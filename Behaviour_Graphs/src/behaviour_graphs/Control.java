@@ -44,8 +44,22 @@ public class Control{
 			}
 			System.out.println("]");
 		}
-		/*
 		
+		float[][][] testGraphs = new float[8][15][15];
+		for(int cluster = 0; cluster < 8; cluster++) {
+			for(int row = 0; row < 15; row++) {
+				for(int col = 0; col < 15; col++) {
+					System.out.println("division: " + 1.00f/16.00f);
+					testGraphs[cluster][row][col] = 1.00f/16.00f;
+				}
+			}
+		}
+		
+		PH.createGraph(testGraphs);
+		
+		
+		
+		/*
 		
 		
 		

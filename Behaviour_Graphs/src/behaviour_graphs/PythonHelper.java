@@ -210,6 +210,7 @@ public class PythonHelper {
 			for(int row = 0; row < clusters[cluster].length; row++) {
 				for(int col = 0; col < clusters[cluster][row].length; col++) {
 					if(col == 0) {
+						System.out.println("Cluster: " + cluster + ", row: " + row + ", column: " + col + ". This: " + clusters[cluster][row][col] + ", Math.round: " + Math.round(clusters[cluster][row][col] *100));
 						totals[cluster][row] = Math.round(clusters[cluster][row][col] *100);
 						clusters[cluster][row][col] = 0.00f;
 					}
