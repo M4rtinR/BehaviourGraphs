@@ -205,17 +205,20 @@ public class PythonHelper {
 		// Set the containings and precedings arrays to be all 0s.
 		float[][][] containings = new float[clusters.length][15][15];
 		float[][][] precedings = new float[clusters.length][15][15];
+		float[][][] followings = new float[clusters.length][15][15];
 		
 		for(int cluster = 0; cluster < clusters.length; cluster++) {
 			for(int row = 0; row < clusters[cluster].length; row++) {
 				for(int col = 0; col < clusters[cluster][row].length; col++) {
-					if(col == 0) {
+					if(col == 0 && row != 15) { // row 15 is "end" so we don't need to worry about it.
 						System.out.println("Cluster: " + cluster + ", row: " + row + ", column: " + col + ". This: " + clusters[cluster][row][col] + ", Math.round: " + Math.round(clusters[cluster][row][col] *100));
 						totals[cluster][row] = Math.round(clusters[cluster][row][col] *100);
-						clusters[cluster][row][col] = 0.00f;
+						followings[cluster][row][col] = 0.00f;
+					} else if (col != 15 && row != 15) {
+						containings[cluster][row][col] = 0.00f;
+						precedings[cluster][row][col] = 0.00f;
+						followings[cluster][row][col] = clusters[cluster][row][col];
 					}
-					containings[cluster][row][col] = 0.00f;
-					precedings[cluster][row][col] = 0.00f;
 				}
 			}
 		}
@@ -234,7 +237,7 @@ public class PythonHelper {
 		
 		for(int cluster = 0; cluster < clusters.length; cluster++) {
 			// The graph creator will create the JGraph from the analysed data.
-			GraphCreator gc = new GraphCreator(totals[cluster], precedings[cluster], containings[cluster], clusters[cluster], totals[cluster], 0);
+			GraphCreator gc = new GraphCreator(totals[cluster], precedings[cluster], containings[cluster], followings[cluster], totals[cluster], 0);
 			Graph<BehaviourVertex, BehaviourEdge> g = gc.getGraph();
 			
 			// The graph visualiser will format the graph to be displayed to the user.
