@@ -22,6 +22,8 @@ public class DataAnalyser {
 	 * @param data - the counted data to be analysed.
 	 */
 	public DataAnalyser(ArrayList<HashMap<String, ArrayList<Integer>>> data) {
+		// System.out.println("data.size() = " + data.size());
+		// System.out.println(data);
 		totals = new int[15];
 		preceding = new float[15][15];
 		containing = new float[15][15];

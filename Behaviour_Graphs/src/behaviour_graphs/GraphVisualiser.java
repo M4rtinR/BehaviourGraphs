@@ -158,7 +158,7 @@ public class GraphVisualiser extends JApplet{
             int count = 0;
         	for(BehaviourVertex v:g.vertexSet()) {
         		//System.out.println("count = " + count);
-        		System.out.println("\nbehaviour = " + v.getbehaviour());
+        		//System.out.println("\nbehaviour = " + v.getbehaviour());
         		if(count == 0 || count == g.vertexSet().size() - 1) { // Change this to "(count == 0 || count == <no_of__behaviours>)"
         			// The size of start and end will always be 30
         			sizes[count] = 10;
@@ -185,7 +185,7 @@ public class GraphVisualiser extends JApplet{
         					if(contains[count]>2) {
         						justPrint[count] = true;
         					}
-        					System.out.println("Adding: " + names.get(i));
+        					//System.out.println("Adding: " + names.get(i));
         					//temp.add(names.get(i));
         					//tempPercentage.add(containing[i]);
         					//System.out.println("\n" + tempUnordered + "\n");
@@ -259,10 +259,10 @@ public class GraphVisualiser extends JApplet{
         				System.out.println("Adding: " + names.get(minPos));
         				tempOrdered.add(names.get(minPos));
         			}*/
-        			System.out.println("tempUnordered.size(): " + tempUnordered.size());
+        			//System.out.println("tempUnordered.size(): " + tempUnordered.size());
         			int size = tempUnordered.size();
         			for(int j = 0; j < size; j++) {
-        				System.out.println("j = " + j + ", tempUnordered = " + tempUnordered);
+        				//System.out.println("j = " + j + ", tempUnordered = " + tempUnordered);
 	        			Iterator<Map.Entry<Float, String>> it = tempUnordered.entrySet().iterator();
 	        			float max = (float) 0;
 	        			while (it.hasNext()) {
@@ -271,7 +271,7 @@ public class GraphVisualiser extends JApplet{
 	        					max = (float) entry.getKey();
 	        				}
 	        			}
-	        			System.out.println("Adding Colour: " + colours.get(tempUnordered.get(max)));
+	        			//System.out.println("Adding Colour: " + colours.get(tempUnordered.get(max)));
 	        			toAddColours.add(colours.get(tempUnordered.get(max)));
 	        			for(int i = 0; i <= 14; i++) {
 	        				if(tempUnordered.get(max).equals(names.get(i))) {
@@ -320,11 +320,11 @@ public class GraphVisualiser extends JApplet{
             
             for (Object cell : cells) {
             	mxCell c = (mxCell) cell;
-            	System.out.println("VertexSet size: " + g.vertexSet().size());
+            	//System.out.println("VertexSet size: " + g.vertexSet().size());
                 if (c.isVertex() && count2 != 0 && count2 != g.vertexSet().size() - 1) { //isVertex not start or end.
                 	//addedParent = false;
                 	mxGeometry geometry = c.getGeometry();
-                	System.out.println(c.getValue() + "count: " + count2);
+                	//System.out.println(c.getValue() + "count: " + count2);
                 	/*if(count2 == 0 || count2 == 5) {
             			geometry.setWidth(30);
 		                geometry.setHeight(30);
@@ -378,8 +378,8 @@ public class GraphVisualiser extends JApplet{
 	        
 	        int count = 0; // Used to find all the behaviours contained in/concurrent to this one.
 	        int contCount = 0; // Used to get the right parent.
-	        System.out.println("Parents: " + parents);
-	        System.out.println("notAddParents: " + notAddParents);
+	        //System.out.println("Parents: " + parents);
+	        //System.out.println("notAddParents: " + notAddParents);
 	        for(Object cell : cells) {
 	        	mxCell c = (mxCell) cell;
 	        	if(parents.contains(c)) {
@@ -389,11 +389,11 @@ public class GraphVisualiser extends JApplet{
 		        		// Each concurrent behaviour will be a vertex overlapping (i.e. with the same x and y coordinates) the parent behaviour.
 		        		
 		        		if(!(notAddParents.contains(c.getValue()))) { //If there's not more than 3 concurrent behaviours
-		        			System.out.println(c.getValue());
+		        			/*System.out.println(c.getValue());
 		        			System.out.println("Adding to graph: " + toAddColours.get(contCount));
 		        			System.out.println("toAddColours.size: " + toAddColours.size());
 		        			System.out.println(toAddColours);
-		        			System.out.println("contCount: " + contCount);
+		        			System.out.println("contCount: " + contCount);*/
 		        			jgxAdapter.insertVertex(jgxAdapter.getDefaultParent(), null, "", geometry.getX(), geometry.getY()+geometry.getHeight()-extraSizes.get(contCount), sizes[count]*multiplier, extraSizes.get(contCount), "shape=rectangle;strokeColor=" + toAddColours.get(contCount) + ";dashed=1;fontColor=" + toAddColours.get(contCount) + ";fontSize=" + sizes[count]*40/100 + ";fillColor=" + toAddColours.get(contCount) + ";opacity=50;");
 		        			
 		        		}
