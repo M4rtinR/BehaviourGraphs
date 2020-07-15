@@ -1,11 +1,7 @@
 package behaviour_graphs;
 
-import java.util.List;
-
 import javax.swing.JFrame;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.lang.Math;
@@ -26,6 +22,12 @@ public class PythonHelper {
 	
 	private ArrayList<ArrayList<ArrayList<Float>>> compoundFollowing;
 	private ArrayList<ArrayList<Integer>> compoundSequences;
+	
+	private ArrayList<ArrayList<ArrayList<Float>>> compoundSquashFollowing;
+	private ArrayList<ArrayList<Integer>> compoundSquashSequences;
+	
+	private ArrayList<ArrayList<ArrayList<Float>>> compoundPhysioFollowing;
+	private ArrayList<ArrayList<Integer>> compoundPhysioSequences;
 	
 	private HashMap<Integer, Integer> compoundMappings;
 	
@@ -55,21 +57,14 @@ public class PythonHelper {
 		squashMatrix = constructMatrix(squashData);
 		physioMatrix = constructMatrix(physioData);
 		
-		compoundSequences = constructSequenceList(squashData, true);
-		//System.out.println("compoundSequences.get(0): " + compoundSequences.get(0));
-		/*for (ArrayList<Integer> sequence : compoundSequences) {
-			System.out.println(sequence);
-		}
-		System.out.println("]");*/
+		compoundSequences = constructSequenceList(allData, true);
 		compoundFollowing = constructFollowingMatrix(compoundSequences);
-		/*System.out.print("compoundFollowing.get(0):\n[");
-		for(int row = 0; row < compoundFollowing.get(0).size(); row++) {
-			System.out.println(compoundFollowing.get(0).get(row));
-		}
-		System.out.println("]");*/
 		
-		System.out.println(compoundMappings);
+		compoundSquashSequences = constructSequenceList(squashData, true);
+		compoundSquashFollowing = constructFollowingMatrix(compoundSquashSequences);
 		
+		compoundPhysioSequences = constructSequenceList(physioData, true);
+		compoundPhysioFollowing = constructFollowingMatrix(compoundPhysioSequences);
 	}
 	
 	private ArrayList<Integer> getIntegerList(ArrayList<String> line) {
@@ -195,7 +190,6 @@ public class PythonHelper {
 		DataAnalyser da = new DataAnalyser(countedData);
 		
 		float[][] thisFollowingArr = da.getFollowing();
-		float[][] thisConcurrentArr = da.getContaining();
 		int[] thisOccurrences = da.getTotals();
 		int totalBehaviours = 0;
 		for(int thisBehaviour : thisOccurrences) {
@@ -214,8 +208,6 @@ public class PythonHelper {
 
 		// Add a column at the beginning for "Start" and a row at the end for "End" and store in actualFollowing
 		ArrayList<ArrayList<Float>> actualFollowing = new ArrayList<ArrayList<Float>>(16);
-		// Create a new ArrayList to store the values of compound (i.e. concurrent) behaviours
-		ArrayList<ArrayList<Float>> compound = new ArrayList<ArrayList<Float>>();
 		
 		for (int row = 0; row < 16; row++) {
 			ArrayList<Float> tempActual = new ArrayList<Float>(16);
@@ -444,12 +436,20 @@ public class PythonHelper {
 		return compoundFollowing;
 	}
 	
-	public ArrayList<Float> testGet() {
-		ArrayList<Float> returnList = new ArrayList<Float>(3);
-		returnList.add((float) 0);
-		returnList.add((float) 1);
-		returnList.add((float) 2);
-		return returnList;
+	public ArrayList<ArrayList<Integer>> getCompoundSquashSequences(){
+		return compoundSquashSequences;
+	}
+	
+	public ArrayList<ArrayList<ArrayList<Float>>> getCompoundSquashFollowing(){
+		return compoundSquashFollowing;
+	}
+	
+	public ArrayList<ArrayList<Integer>> getCompoundPhysioSequences(){
+		return compoundPhysioSequences;
+	}
+	
+	public ArrayList<ArrayList<ArrayList<Float>>> getCompoundPhysioFollowing(){
+		return compoundPhysioFollowing;
 	}
 	
 	public void createGraph(float[][][] clusters) {
@@ -521,7 +521,7 @@ public class PythonHelper {
 						} else {
 							//System.out.println("else");
 							//Final column
-							followings[cluster][decodeParent(row)][14] = clusters[cluster][row][col];
+							followings[cluster][decodeParent(row)][14] += clusters[cluster][row][col];
 						}
 					}
 				}
@@ -533,7 +533,7 @@ public class PythonHelper {
 			for(int parent = 0; parent < concurrent[cluster].length; parent++) {
 				for(int conc = 0; conc < concurrent[cluster][parent].length; conc++) {
 					if(concurrent[cluster][parent][conc] != 0 && totals[cluster][parent] != 0) {
-						containings[cluster][parent][conc-1] = (float) concurrent[cluster][parent][conc]/ (float) totals[cluster][parent];
+						containings[cluster][parent][conc] = (float) concurrent[cluster][parent][conc]/ (float) totals[cluster][parent];
 					}
 				}
 			}
@@ -603,7 +603,7 @@ public class PythonHelper {
 		if(compoundMappings.containsKey(codedBehaviour)) {
 			compoundBehaviour = compoundMappings.get(codedBehaviour);
 		} else {
-			System.out.println("compoundMappings does not contain this key.");
+			System.out.println("compoundMappings does not contain this key: " + codedBehaviour);
 			compoundBehaviour = 0;
 		}
 		
@@ -612,7 +612,13 @@ public class PythonHelper {
 	
 	private int decodeConcurrent(int codedBehaviour) {
 		//System.out.println("Decoding concurrent of: " + codedBehaviour);
-		int compoundBehaviour = compoundMappings.get(codedBehaviour);
+		int compoundBehaviour;
+		if(compoundMappings.containsKey(codedBehaviour)) {
+			compoundBehaviour = compoundMappings.get(codedBehaviour);
+		} else {
+			System.out.println("compoundMappings does not contain this key: " + codedBehaviour);
+			compoundBehaviour = 0;
+		}
 		
 		return compoundBehaviour%16;
 	}
