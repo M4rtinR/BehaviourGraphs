@@ -2,6 +2,7 @@ package behaviour_graphs;
 
 import javax.swing.JFrame;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.lang.Math;
@@ -29,42 +30,75 @@ public class PythonHelper {
 	private ArrayList<ArrayList<ArrayList<Float>>> compoundPhysioFollowing;
 	private ArrayList<ArrayList<Integer>> compoundPhysioSequences;
 	
+	private ArrayList<ArrayList<Integer>> testSequences;
+	
 	private HashMap<Integer, Integer> compoundMappings;
 	
-	public PythonHelper() {
+	public PythonHelper(int whichData) {
 		compoundMappings = new HashMap<Integer, Integer>();
 		
-		//System.out.println("Test1");
-		FileReader frSquash = new FileReader("C:\\Users\\conta\\OneDrive\\Documents\\Uni\\PhD\\Observation Study\\Squash Coaches\\SPSS\\Observation Study\\Behaviours.csv");
-		FileReader frPhysio = new FileReader("C:\\Users\\conta\\OneDrive\\Documents\\Uni\\PhD\\Observation Study\\Stroke Physiotherapists\\Data\\Behaviours.csv");
+		FileReader frSquash;
+		FileReader frPhysio;
 		
-		ArrayList<ArrayList<String>> squashData = frSquash.getAllSquashData();
-		ArrayList<ArrayList<String>> physioData = frPhysio.getAllSquashData();
+		ArrayList<ArrayList<String>> squashData;
+		ArrayList<ArrayList<String>> physioData;
 		
-		ArrayList<ArrayList<String>> allData = new ArrayList<ArrayList<String>>(squashData.size() + physioData.size());
-		allData.addAll(squashData);
-		allData.addAll(physioData);
+		switch(whichData) {
+		case 0:
+			ArrayList<ArrayList<String>> testData = new ArrayList<ArrayList<String>>(
+					Arrays.asList(new ArrayList<String>(Arrays.asList("1", "1", "2", "2", "3", "4", "4~9", "3", "5", "7", "6", "4", "7")),
+							new ArrayList<String>(Arrays.asList("1", "2", "3", "5", "4~9", "3", "7", "6", "1", "1", "4", "4")),
+							new ArrayList<String>(Arrays.asList("12", "8", "8", "9~2", "9", "12", "12~10", "11", "10", "14", "14", "13", "10", "13")),
+							new ArrayList<String>(Arrays.asList("12", "12", "13", "10", "14", "14", "13", "8", "8", "9~2", "9", "10", "11", "10", "13"))));
+			
+			testSequences = constructSequenceList(testData, true);
+			
+			break;
+		case 1:
+			frSquash = new FileReader("C:\\Users\\conta\\OneDrive\\Documents\\Uni\\PhD\\Observation Study\\Squash Coaches\\SPSS\\Observation Study\\Behaviours.csv");
+			
+			squashData = frSquash.getAllSquashData();
+			
+			squashSequences = constructSequenceList(squashData, false);
+			//squashFollowing = constructFollowingList(squashData);
+			
+			compoundSquashSequences = constructSequenceList(squashData, true);
+			//compoundSquashFollowing = constructFollowingMatrix(compoundSquashSequences);
+			
+			break;
+		case 2:
+			frPhysio = new FileReader("C:\\Users\\conta\\OneDrive\\Documents\\Uni\\PhD\\Observation Study\\Stroke Physiotherapists\\Data\\Behaviours.csv");
+			
+			physioData = frPhysio.getAllSquashData();
+			
+			physioSequences = constructSequenceList(physioData, false);
+			//physioFollowing = constructFollowingList(physioData);
+			
+			compoundPhysioSequences = constructSequenceList(physioData, true);
+			//compoundPhysioFollowing = constructFollowingMatrix(compoundPhysioSequences);
+			
+			break;
+		case 3:
+			frSquash = new FileReader("C:\\Users\\conta\\OneDrive\\Documents\\Uni\\PhD\\Observation Study\\Squash Coaches\\SPSS\\Observation Study\\Behaviours.csv");
+			frPhysio = new FileReader("C:\\Users\\conta\\OneDrive\\Documents\\Uni\\PhD\\Observation Study\\Stroke Physiotherapists\\Data\\Behaviours.csv");
+			
+			squashData = frSquash.getAllSquashData();
+			physioData = frPhysio.getAllSquashData();
+			
+			ArrayList<ArrayList<String>> allData = new ArrayList<ArrayList<String>>(squashData.size() + physioData.size());
+			allData.addAll(squashData);
+			allData.addAll(physioData);
+			
+			sequences = constructSequenceList(allData, false);
+			//following = constructFollowingList(allData);
+			
+			compoundSequences = constructSequenceList(allData, true);
+			//compoundFollowing = constructFollowingMatrix(compoundSequences);
+			
+			break;
+		}
 		
-		sequences = constructSequenceList(allData, false);
-		following = constructFollowingList(allData);
-		
-		squashSequences = constructSequenceList(squashData, false);
-		squashFollowing = constructFollowingList(squashData);
-		
-		physioSequences = constructSequenceList(physioData, false);
-		physioFollowing = constructFollowingList(physioData);
-		
-		squashMatrix = constructMatrix(squashData);
-		physioMatrix = constructMatrix(physioData);
-		
-		compoundSequences = constructSequenceList(allData, true);
-		compoundFollowing = constructFollowingMatrix(compoundSequences);
-		
-		compoundSquashSequences = constructSequenceList(squashData, true);
-		compoundSquashFollowing = constructFollowingMatrix(compoundSquashSequences);
-		
-		compoundPhysioSequences = constructSequenceList(physioData, true);
-		compoundPhysioFollowing = constructFollowingMatrix(compoundPhysioSequences);
+		System.out.println(compoundMappings);
 	}
 	
 	private ArrayList<Integer> getIntegerList(ArrayList<String> line) {
@@ -397,9 +431,23 @@ public class PythonHelper {
 		return following;
 	}
 	
-	public ArrayList<ArrayList<Integer>> getSequences(){
-		// Return an array of the sequence of each segment of each session.
-		return sequences;
+	public ArrayList<ArrayList<Integer>> getSequences(int whichData, int compound){
+		// Return an array of the sequence of each segment of each session in the requested data.
+		switch(whichData) {
+		case 0:
+			return testSequences;
+		case 1:
+			if(compound == 1) return compoundSquashSequences;
+			else return squashSequences;
+		case 2:
+			if(compound == 1) return compoundPhysioSequences;
+			else return physioSequences;
+		case 3:
+			if(compound == 1) return compoundSequences;
+			else return sequences;
+		}
+		
+		return null;
 	}
 	
 	public ArrayList<ArrayList<ArrayList<Float>>> getSquashFollowing(){
@@ -450,6 +498,10 @@ public class PythonHelper {
 	
 	public ArrayList<ArrayList<ArrayList<Float>>> getCompoundPhysioFollowing(){
 		return compoundPhysioFollowing;
+	}
+	
+	public ArrayList<ArrayList<Integer>> getTestSequences(){
+		return testSequences;
 	}
 	
 	public void createGraph(float[][][] clusters) {

@@ -19,9 +19,9 @@ import org.jgrapht.Graph;
 public class Control{
 	
 	public static void main(String[] args) {
-		PythonHelper PH = new PythonHelper();
+		PythonHelper PH = new PythonHelper(0);
 		ArrayList<ArrayList<ArrayList<Float>>> f = PH.getFollowing();
-		ArrayList<ArrayList<Integer>> i = PH.getSequences();
+		ArrayList<ArrayList<Integer>> i = PH.getSequences(0, 1);
 		System.out.println(f);
 		System.out.println(i);
 		
