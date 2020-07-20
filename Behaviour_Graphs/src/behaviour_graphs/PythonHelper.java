@@ -101,6 +101,10 @@ public class PythonHelper {
 		System.out.println(compoundMappings);
 	}
 	
+	public PythonHelper(HashMap<Integer, Integer> cm) {
+		compoundMappings = cm;
+	}
+	
 	private ArrayList<Integer> getIntegerList(ArrayList<String> line) {
 		ArrayList<Integer> sequence = new ArrayList<Integer>(line.size() - 4);
 		
