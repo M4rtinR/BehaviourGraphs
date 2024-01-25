@@ -1,0 +1,13 @@
+# Behaviour Graphs
+
+This repo contains code that will take as input a sequence of coaching actions and output a visual representation of those actions in the form of a behaviour graph. It can also input a transition matrix of coaching actions and output a corresponding behaviour graph. The behaviour graphs are generated using the jgraphx module and an example can be seen below.
+
+![Example of a behaviour graph](/graph0.png?raw=true)
+
+A behaviour graph is a simplified data visualisation of the underlying policy it represents, allowing the visualisation of the temporal relationships between actions over a coaching session, as well as their relative frequencies. The graphs are similar in appearance to visualisations of Markov Decision Processes (MDPs) commonly seen in Machine Learning (ML) literature but include additional information such as the frequency of visiting each state. In the graphs, the size of each node represents the frequency of that action and the transitions represent the likelihood of one action being followed by another. For example, the graph above shows that 57% of the time the session will start with a pre-instruction, and following this the most likely next action would be praise. Only actions that accounted for more than 5% of the total actions used by the coach, and only transitions with a probability greater than 0.1 are displayed (Exceptions are the “Start” and “End” nodes whose size is consistent across all graphs and whose transitions are displayed if the probability exceeds 0.03. This was done to avoid situations where “Start” or “End” had no transitions coming in or out.) The coloured areas within the nodes represent concurrent actions used. For example, in the graph shown above the yellow area within the praise box means that some of the time the coach would use the person's first name while giving them praise.
+
+The code works by calculating a transition matrix from each action sequence simply by counting the transitions from each possible action to each other action. This defines the occurrence and thickness of arrows between nodes in the resulting graphs. The total occurrences of each action are also calculated. These define the occurrence and size of nodes in the resulting graphs.
+
+## Using the Code
+
+The code is set up to take transition matrices directly from the clustering program available at: https://github.com/M4rtinR/Clustering. To use the code for your own purposes, you can either adapt the clustering program to produce transition matrices associated with your own data, or generate graphs directly from your own action sequences by replacing the csv file names with your own csv files. Csv files should contain 1 action sequence per line in order to be parsed correctly.
